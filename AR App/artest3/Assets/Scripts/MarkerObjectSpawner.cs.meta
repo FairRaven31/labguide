@@ -1,0 +1,17 @@
+fileFormatVersion: 2
+guid: 4f181cac892d19c40a20e5609a444c74
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - digitalMultimeterPrefab: {fileID: 7225439886096281689, guid: b4152009d86368745bfdf025a37786b9, type: 3}
+  - signalGeneratorPrefab: {fileID: 14281923491078307, guid: 8129296911d432248a3eb1956d778b85, type: 3}
+  - functionGeneratorPrefab: {fileID: 728251960629099333, guid: f1bff385163d16640bf414ab55ddc5f1, type: 3}
+  - oscilloscopePrefab: {fileID: 6051190657811026493, guid: cbd7961370190b344901cd59f7772c13, type: 3}
+  - powerSupplyPrefab: {fileID: 5221951507608600573, guid: c0109079dcdad474899e5549753e9850, type: 3}
+  - vectorNetworkAnalyzerPrefab: {fileID: 5221951507608600573, guid: 36ef9733ad3886140a64371a68983e72, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

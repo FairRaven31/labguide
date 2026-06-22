@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LabGuide Presentation</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap');
+
+        :root {
+            --bg: #020617;
+            --green: #10b981;
+            --emerald: #34d399;
+            --teal: #2dd4bf;
+            --text-main: #f8fafc;
+            --text-muted: #94a3b8;
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100vw;
+            height: 100vh;
+            font-family: 'Inter', sans-serif;
+            background: var(--bg);
+            color: var(--text-main);
+            overflow: hidden;
+        }
+
+        .ambient-glow {
+            position: fixed;
+            top: -50%; left: -50%;
+            width: 200%; height: 200%;
+            background: 
+                radial-gradient(circle at 30% 40%, rgba(16, 185, 129, 0.15) 0%, transparent 40%),
+                radial-gradient(circle at 70% 60%, rgba(45, 212, 191, 0.1) 0%, transparent 40%);
+            z-index: 0;
+            animation: drift 20s infinite alternate ease-in-out;
+            pointer-events: none;
+        }
+
+        @keyframes drift {
+            0% { transform: translate(0, 0) scale(1); }
+            100% { transform: translate(5%, 5%) scale(1.1); }
+        }
+
+        .slide-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            z-index: 1;
+        }
+
+        .slide {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            opacity: 0;
+            visibility: hidden;
+            transition: opacity 0.8s ease, transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+            transform: scale(0.95);
+            display: flex;
+        }
+
+        .slide.active {
+            opacity: 1;
+            visibility: visible;
+            transform: scale(1);
+        }
+
+        /* Layouts */
+        .split-layout {
+            display: flex;
+            width: 100%; height: 100%;
+        }
+
+        .split-image {
+            flex: 1;
+            background-size: cover;
+            background-position: center;
+            position: relative;
+        }
+
+        .split-image::after {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            background: linear-gradient(to right, transparent, var(--bg));
+        }
+
+        .split-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 80px 120px;
+            background: var(--bg);
+        }
+
+        .full-layout {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 80px;
+            width: 100%;
+        }
+
+        /* Typography */
+        h1 {
+            font-size: 4.5rem;
+            font-weight: 800;
+            margin: 0 0 20px 0;
+            background: linear-gradient(135deg, var(--emerald), var(--teal));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            line-height: 1.1;
+        }
+
+        h2 {
+            font-size: 3.5rem;
+            font-weight: 600;
+            margin: 0 0 30px 0;
+            color: #fff;
+            line-height: 1.2;
+        }
+
+        p {
+            font-size: 1.6rem;
+            color: var(--text-muted);
+            line-height: 1.5;
+            margin: 0 0 24px 0;
+        }
+
+        .highlight {
+            color: var(--emerald);
+        }
+
+        /* Glassmorphism Cards */
+        .glass-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 40px;
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 24px;
+            padding: 40px;
+            backdrop-filter: blur(20px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+            text-align: left;
+            transition: transform 0.3s ease;
+        }
+
+        .glass-card h3 {
+            font-size: 1.8rem;
+            margin: 0 0 16px 0;
+            color: var(--emerald);
+        }
+
+        .glass-card p {
+            font-size: 1.2rem;
+            margin: 0;
+        }
+
+        /* Controls */
+        .controls {
+            position: fixed;
+            bottom: 30px;
+            right: 40px;
+            z-index: 100;
+            display: flex;
+            gap: 15px;
+        }
+
+        .btn {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            color: var(--emerald);
+            padding: 12px 24px;
+            border-radius: 999px;
+            cursor: pointer;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.2s ease;
+            backdrop-filter: blur(10px);
+        }
+
+        .btn:hover {
+            background: rgba(16, 185, 129, 0.2);
+            transform: translateY(-2px);
+        }
+        
+        .progress-bar {
+            position: fixed;
+            top: 0; left: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--emerald), var(--teal));
+            z-index: 100;
+            transition: width 0.3s ease;
+        }
+            @media print {
+            body, html {
+                height: auto;
+                overflow: visible;
+                background: #020617 !important;
+                -webkit-print-color-adjust: exact;
+                print-color-adjust: exact;
+            }
+            .ambient-glow, .controls, .progress-bar {
+                display: none !important;
+            }
+            .slide-container {
+                position: relative;
+                height: auto;
+            }
+            .slide {
+                position: relative !important;
+                opacity: 1 !important;
+                visibility: visible !important;
+                transform: none !important;
+                height: 100vh !important;
+                width: 100vw !important;
+                page-break-after: always;
+                page-break-before: always;
+                display: flex !important;
+                break-inside: avoid;
+            }
+            @page {
+                size: 1920px 1080px;
+                margin: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="ambient-glow"></div>
+    <div class="progress-bar" id="progress"></div>
+
+    <div class="slide-container" id="slides">
+        
+        <!-- Slide 1 -->
+        <div class="slide split-layout active">
+            <div class="split-image" style="background-image: url('presentation_assets/lab_hero.png');"></div>
+            <div class="split-content">
+                <h1>LabGuide</h1>
+                <h2>Your personal guide through the lab.</h2>
+                <p>From lost — to ready.</p>
+                <p style="font-size: 1.2rem; color: var(--teal); margin-top: 40px;">Instrumentation Mastery · Adaptive Learning</p>
+            </div>
+        </div>
+
+        <!-- Slide 2 -->
+        <div class="slide full-layout">
+            <h2>Nobody told them where to start.</h2>
+            <div style="max-width: 900px;">
+                <p>Six instruments. Oscilloscope. Power supply. Function generator. Spectrum analyzer. Network analyzer. Multimeter.</p>
+                <p>No one explains which one to touch first. No one asks what they already know. The room is silent.</p>
+                <p>That stomach-drop feeling — completely lost while everyone around you seems fine — <span class="highlight">that's where we started.</span></p>
+            </div>
+        </div>
+
+        <!-- Slide 3 -->
+        <div class="slide split-layout">
+            <div class="split-content">
+                <h2 style="color: #f43f5e;">The same lesson.<br>For every student.<br>Every single time.</h2>
+                <div class="glass-grid" style="grid-template-columns: 1fr; gap: 20px;">
+                    <div class="glass-card" style="border-color: rgba(244, 63, 94, 0.3);">
+                        <h3 style="color: #fb7185;">Student A — never touched an oscilloscope</h3>
+                        <p>Gets the same content as someone with two years of experience. They drown and nobody notices.</p>
+                    </div>
+                    <div class="glass-card" style="border-color: rgba(244, 63, 94, 0.3);">
+                        <h3 style="color: #fb7185;">Student B — already knows this</h3>
+                        <p>Gets the same content. They zone out and nobody notices either.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="split-image" style="background: radial-gradient(circle, #4c0519 0%, var(--bg) 70%);">
+                <h1 style="font-size: 15rem; color: rgba(244, 63, 94, 0.1); text-align: center; padding-top: 30vh;">X</h1>
+            </div>
+        </div>
+
+        <!-- Slide 4 -->
+        <div class="slide full-layout">
+            <h1 style="font-size: 6rem; margin-bottom: 40px;">What if we <span class="highlight">listened</span> first?</h1>
+            <p style="max-width: 800px;">What if, before a single lesson appeared, we sat down with the student and said: <i>tell me what you know. tell me your goals.</i></p>
+            <p style="max-width: 800px;">And then — only then — built a curriculum <span class="highlight">just for them.</span></p>
+        </div>
+
+        <!-- Slide 5 -->
+        <div class="slide full-layout">
+            <h2>The Cinematic Onboarding Flow</h2>
+            <p>Under 30 seconds. A tailored path generated instantly.</p>
+            <div class="glass-grid">
+                <div class="glass-card">
+                    <h3>1. Experience Level</h3>
+                    <p>Are they a Beginner, a Tinkerer, or an Engineering Student? We meet them at their level.</p>
+                </div>
+                <div class="glass-card">
+                    <h3>2. Primary Goal</h3>
+                    <p>Circuit Design, Signal Analysis, or General Mastery. We align with their motivation.</p>
+                </div>
+                <div class="glass-card">
+                    <h3>3. AI Compilation</h3>
+                    <p>The system builds a dynamic roadmap, filtering out noise and presenting only what matters.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 6 -->
+        <div class="slide split-layout">
+            <div class="split-image" style="background-image: url('presentation_assets/safety_lock.png');"></div>
+            <div class="split-content">
+                <h2 style="color: #fbbf24;">The Safety Gateway</h2>
+                <p>No one touches hardware before they're ready. We made sure of that.</p>
+                <div class="glass-card" style="margin-bottom: 20px; border-color: rgba(251, 191, 36, 0.3);">
+                    <h3 style="color: #fcd34d;">Simulator Default</h3>
+                    <p>All physical instruments are padlocked in the UI until the student completes a virtual safety induction.</p>
+                </div>
+                <div class="glass-card" style="border-color: rgba(251, 191, 36, 0.3);">
+                    <h3 style="color: #fcd34d;">Strict Hardware Blocking</h3>
+                    <p>Instructors must explicitly click "Approve" before the student can unlock their dashboard.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 7 -->
+        <div class="slide full-layout">
+            <h2>Teach before test.<br><span class="highlight">At 3 different levels.</span></h2>
+            <p style="max-width: 900px;">You don't get tested on something you haven't been taught. Not here.</p>
+            <div class="glass-grid">
+                <div class="glass-card">
+                    <h3>Beginner</h3>
+                    <p>Core concepts, simple analogies, and basic usage. For those starting from scratch.</p>
+                </div>
+                <div class="glass-card">
+                    <h3>Intermediate</h3>
+                    <p>Specific features and standard measurement techniques. For the capable student.</p>
+                </div>
+                <div class="glass-card">
+                    <h3>Advanced</h3>
+                    <p>Deep-dive capabilities and mathematical precision. For the expert.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 8 -->
+        <div class="slide full-layout">
+            <h1 style="font-size: 5rem;">Lab IQ & Achievements</h1>
+            <p style="max-width: 800px;">Education requires motivation. We introduced Gamification.</p>
+            <div class="glass-grid" style="grid-template-columns: repeat(3, 1fr);">
+                <div class="glass-card" style="text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 10px;">⚡</div>
+                    <h3>Lab IQ Points</h3>
+                    <p>Students earn XP for completing inductions and passing quizzes.</p>
+                </div>
+                <div class="glass-card" style="text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 10px;">🛡️</div>
+                    <h3>Safety First</h3>
+                    <p>Unlockable badge awarded instantly upon instructor approval.</p>
+                </div>
+                <div class="glass-card" style="text-align: center;">
+                    <div style="font-size: 3rem; margin-bottom: 10px;">🏆</div>
+                    <h3>First Blood</h3>
+                    <p>A permanent achievement for passing their first instrument exam.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 9 -->
+        <div class="slide full-layout">
+            <h2>It doesn't just score you. <span class="highlight">It understands you.</span></h2>
+            <p style="max-width: 900px;">We built in Item Response Theory (IRT). Not just a percentage — a Theta scoring estimate.</p>
+            <div class="glass-grid" style="max-width: 800px;">
+                <div class="glass-card" style="border-color: var(--teal);">
+                    <h3 style="color: var(--teal);">Contextual Scoring</h3>
+                    <p>Two students can score 70%. IRT knows who answered the hard questions right, and who only got the easy ones.</p>
+                </div>
+                <div class="glass-card" style="border-color: var(--teal);">
+                    <h3 style="color: var(--teal);">Adaptive Labels</h3>
+                    <p>It labels what it finds: Developing. Emerging. Capable. Advanced. So the next recommendation is never a guess.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 10 -->
+        <div class="slide split-layout">
+            <div class="split-content">
+                <h2>Instructors stop guessing.<br><span class="highlight">They start knowing.</span></h2>
+                <div class="glass-card" style="margin-bottom: 20px;">
+                    <h3>1-Click Approvals Queue</h3>
+                    <p>A dedicated panel surfaces only students who need hardware access. No hunting through tables.</p>
+                </div>
+                <div class="glass-card">
+                    <h3>Cohort Skill Gaps</h3>
+                    <p>If half the class is struggling with the spectrum analyzer, the dashboard shows it instantly.</p>
+                </div>
+            </div>
+            <div class="split-image" style="background-image: url('presentation_assets/instructor.png');"></div>
+        </div>
+
+        <!-- Slide 11 -->
+        <div class="slide full-layout">
+            <h2>Here's what we delivered.</h2>
+            <div class="glass-grid" style="grid-template-columns: repeat(2, 1fr);">
+                <div class="glass-card">
+                    <h3>Decision-Tree Onboarding</h3>
+                    <p>Personalized learning paths built in under 2 seconds based on user intent.</p>
+                </div>
+                <div class="glass-card">
+                    <h3>Strict Safety Gateway</h3>
+                    <p>Locked UI and mandatory virtual inductions prior to physical hardware access.</p>
+                </div>
+                <div class="glass-card">
+                    <h3>3-Tier Pedagogy</h3>
+                    <p>Beginner, Intermediate, and Advanced interactive reading modules.</p>
+                </div>
+                <div class="glass-card">
+                    <h3>Gamification Engine</h3>
+                    <p>Lab IQ tracking and dynamic unlockable achievements to retain engagement.</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 12 -->
+        <div class="slide split-layout">
+            <div class="split-image" style="background-image: url('presentation_assets/lab_collaboration.png');"></div>
+            <div class="split-content">
+                <h1 style="font-size: 4rem;">One student at a time. <br>That's how it changes.</h1>
+                <p style="margin-top: 30px;">Somewhere, there's a student who was going to give up. Who felt too behind to catch up. Who sat in that lab — staring at those six instruments — and thought maybe this isn't for me.</p>
+                <p><span class="highlight">LabGuide finds that student.</span> Asks what they know. Meets them there. Teaches them what they need. Keeps them safe. And walks them — step by step — all the way to the end.</p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="controls">
+        <button class="btn" onclick="prevSlide()">← Prev</button>
+        <button class="btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const progress = document.getElementById('progress');
+
+        function updateSlide() {
+            slides.forEach((slide, index) => {
+                if(index === currentSlide) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+            progress.style.width = ((currentSlide + 1) / slides.length) * 100 + '%';
+        }
+
+        function nextSlide() {
+            if(currentSlide < slides.length - 1) {
+                currentSlide++;
+                updateSlide();
+            }
+        }
+
+        function prevSlide() {
+            if(currentSlide > 0) {
+                currentSlide--;
+                updateSlide();
+            }
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if(e.key === 'ArrowRight' || e.key === 'Space') nextSlide();
+            if(e.key === 'ArrowLeft') prevSlide();
+        });
+
+        // Initialize progress bar
+        updateSlide();
+    </script>
+</body>
+</html>
+
